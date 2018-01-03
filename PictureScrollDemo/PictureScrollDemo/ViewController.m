@@ -103,6 +103,10 @@
         isleft = NO;
     }
     
+    if (page < 0 || page >= self.imageNameArr.count - 1) {
+        return;
+    }
+    
     UIImageView *firstImgView = (UIImageView *)[self.imageScrollView viewWithTag:100+page];
     UIImageView *secondImgView = (UIImageView *)[self.imageScrollView viewWithTag:100+page+1];
     ImageModel *firstModel = [self.imageModelArr objectAtIndex:page];
