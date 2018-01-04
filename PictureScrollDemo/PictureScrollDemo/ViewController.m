@@ -13,7 +13,8 @@
 #define SCREEN_WIDTH ([[UIScreen mainScreen] bounds].size.width)
 #define SCREEN_HEIGHT ([[UIScreen mainScreen] bounds].size.height)
 
-@interface ViewController (){
+@interface ViewController ()<UIScrollViewDelegate>
+{
     CGFloat _lastPosition;
     int _currentPage;
 }
@@ -21,11 +22,20 @@
 @property(nonatomic,strong)NSArray *imageNameArr;
 @property(nonatomic,strong)NSArray *imageSizeArr;
 @property(nonatomic,strong)NSMutableArray *imageModelArr;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *imageScrollViewHeight;
-@property (weak, nonatomic) IBOutlet UIScrollView *imageScrollView;
+@property (nonatomic, strong) UIScrollView *imageScrollView;
 @end
 
 @implementation ViewController
+
+- (UIScrollView *)imageScrollView {
+    if (!_imageScrollView) {
+        _imageScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 0)];
+        _imageScrollView.delegate = self;
+        _imageScrollView.pagingEnabled = YES;
+        _imageScrollView.bounces = NO;
+    }
+    return _imageScrollView;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -48,8 +58,8 @@
 }
 
 - (void)initViews{
-    self.imageScrollView.pagingEnabled = YES;
-    self.imageScrollView.bounces = NO;
+    
+    [self.view addSubview:self.imageScrollView];
     
     CGFloat firstHeight = 0.0f;
     for (NSInteger i = 0; i < self.imageModelArr.count;i++) {
@@ -81,7 +91,7 @@
     
     UIImageView *imgView = (UIImageView *)[self.imageScrollView viewWithTag:100];
     self.imageScrollView.contentSize = CGSizeMake(self.imageModelArr.count*SCREEN_WIDTH, imgView.height);
-    self.imageScrollViewHeight.constant = imgView.height;
+    self.imageScrollView.height = imgView.height;
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -130,7 +140,7 @@
     firstImgView.frame = CGRectMake((firstImgView.frame.origin.x-movingDistance*firstScale), 0, (firstImgView.height+movingDistance)*firstScale, firstImgView.height+movingDistance);
     secondImgView.frame = CGRectMake(SCREEN_WIDTH*(page+1), 0, firstImgView.height*secondScale, firstImgView.height);
     self.imageScrollView.contentSize = CGSizeMake(self.imageScrollView.contentSize.width, firstImgView.height);
-    self.imageScrollViewHeight.constant = firstImgView.height;
+    self.imageScrollView.height = firstImgView.height;
     
     int newpage = offsetX / SCREEN_WIDTH;
     if (offsetX - newpage*SCREEN_WIDTH < 0.01) {
