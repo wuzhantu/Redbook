@@ -22,10 +22,19 @@
 @property(nonatomic,strong)NSArray *imageNameArr;
 @property(nonatomic,strong)NSArray *imageSizeArr;
 @property(nonatomic,strong)NSMutableArray *imageModelArr;
+@property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIScrollView *imageScrollView;
 @end
 
 @implementation ViewController
+
+- (UIScrollView *)scrollView {
+    if (!_scrollView) {
+        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+        _scrollView.bounces = NO;
+    }
+    return _scrollView;
+}
 
 - (UIScrollView *)imageScrollView {
     if (!_imageScrollView) {
@@ -58,8 +67,14 @@
 }
 
 - (void)initViews{
+    if (@available(iOS 11.0, *)) {
+        self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    } else {
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }
     
-    [self.view addSubview:self.imageScrollView];
+    [self.view addSubview:self.scrollView];
+    [self.scrollView addSubview:self.imageScrollView];
     
     CGFloat firstHeight = 0.0f;
     for (NSInteger i = 0; i < self.imageModelArr.count;i++) {
@@ -92,6 +107,7 @@
     UIImageView *imgView = (UIImageView *)[self.imageScrollView viewWithTag:100];
     self.imageScrollView.contentSize = CGSizeMake(self.imageModelArr.count*SCREEN_WIDTH, imgView.height);
     self.imageScrollView.height = imgView.height;
+    self.scrollView.contentSize = CGSizeMake(SCREEN_WIDTH, self.imageScrollView.contentSize.height + 20);
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -141,6 +157,7 @@
     secondImgView.frame = CGRectMake(SCREEN_WIDTH*(page+1), 0, firstImgView.height*secondScale, firstImgView.height);
     self.imageScrollView.contentSize = CGSizeMake(self.imageScrollView.contentSize.width, firstImgView.height);
     self.imageScrollView.height = firstImgView.height;
+    self.scrollView.contentSize = CGSizeMake(SCREEN_WIDTH, self.imageScrollView.contentSize.height + 20);
     
     int newpage = offsetX / SCREEN_WIDTH;
     if (offsetX - newpage*SCREEN_WIDTH < 0.01) {
