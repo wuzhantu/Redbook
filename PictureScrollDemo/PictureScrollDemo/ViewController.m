@@ -54,8 +54,25 @@
 }
 
 - (void)initDatas{
-    self.imageNameArr = @[@"picture1.png",@"picture2.jpg",@"picture3.jpeg"];
-    self.imageSizeArr = @[@"686,681",@"800,329",@"1242,6759"];
+    self.imageNameArr = @[@"picture1.png",
+                          @"picture2.jpg",
+                          @"picture3.jpg",
+                          @"picture4.jpg",
+                          @"picture5.jpg",
+                          @"picture6.jpg",
+                          @"picture7.jpg",
+                          @"picture8.jpeg",
+                          @"picture9.jpg"];
+    
+    self.imageSizeArr = @[@"686,681",
+                          @"800,329",
+                          @"1100,1505",
+                          @"589,332",
+                          @"360,640",
+                          @"1484,2048",
+                          @"556,748",
+                          @"1242,6759",
+                          @"600,906"];
     
     self.imageModelArr = [NSMutableArray array];
     for (NSInteger i = 0; i < self.imageNameArr.count; i++) {
