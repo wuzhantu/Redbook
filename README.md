@@ -1,2 +1,2 @@
 Demo运行效果:
-![image](redbook/Gift文件夹/NrVUONAkL2.gif)
+![image](http://okslxr2o0.bkt.clouddn.com/redbookAppGif.gif)
